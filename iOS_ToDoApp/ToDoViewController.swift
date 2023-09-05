@@ -105,5 +105,24 @@ class ToDoViewController: UIViewController {
         ])
     }
 
+    func newTaskButtonConstraints() {
+        if let symbolImage = UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold, scale: .large)) {
+            newTaskButton.setImage(symbolImage, for: .normal)
+        }
+        newTaskButton.translatesAutoresizingMaskIntoConstraints = false
+        newTaskButton.backgroundColor = .systemGreen
+        newTaskButton.tintColor = .white
+        newTaskButton.layer.cornerRadius = 25
+        view.addSubview(newTaskButton)
+        newTaskButton.addTarget(self, action: #selector(newTask), for: .touchDown)
+        
+        NSLayoutConstraint.activate([
+            newTaskButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            newTaskButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            newTaskButton.widthAnchor.constraint(equalToConstant: 50),
+            newTaskButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
 }
 
