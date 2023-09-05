@@ -33,4 +33,18 @@ class DetailViewController: UIViewController {
         }
     }
     
+    func titleConfigure() {
+        titleTextField.placeholder = "Название"
+        titleTextField.borderStyle = .roundedRect
+        titleTextField.backgroundColor = .white
+        titleTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            titleTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleTextField.heightAnchor.constraint(equalToConstant: 45)
+        ])
+        
+    }
 }
