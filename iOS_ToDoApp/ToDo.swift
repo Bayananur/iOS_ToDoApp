@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct ToDo: Codable {
     var title = ""
     var description = ""
