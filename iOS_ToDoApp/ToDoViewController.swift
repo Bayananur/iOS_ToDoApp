@@ -140,5 +140,125 @@ class ToDoViewController: UIViewController {
     }
 }
 
+extension ToDoViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return array.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        
+        if tableView.isEditing {
+            let reorderControl = UIStackView(arrangedSubviews: [UIView(), UIView()])
+            reorderControl.translatesAutoresizingMaskIntoConstraints = false
+            cell.contentView.addSubview(reorderControl)
+            
+            NSLayoutConstraint.activate([
+                reorderControl.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+                reorderControl.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
+                reorderControl.widthAnchor.constraint(equalToConstant: 30),
+                reorderControl.heightAnchor.constraint(equalToConstant: 30)
+            ])
+            
+            let reorderImage = UIImageView(image: UIImage(systemName: "line.horizontal.3"))
+            reorderImage.tintColor = .systemGray
+            reorderImage.contentMode = .scaleAspectFit
+            reorderImage.translatesAutoresizingMaskIntoConstraints = false
+            reorderControl.insertArrangedSubview(reorderImage, at: 1)
+            
+            tableView.reloadData()
+        }
+        
+        let checkmark = UIButton(type: .system)
+        checkmark.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+        checkmark.translatesAutoresizingMaskIntoConstraints = false
+        checkmark.tintColor = .systemYellow
+        checkmark.tag = indexPath.row
+        checkmark.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        cell.contentView.addSubview(checkmark)
+        
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.font = UIFont.systemFont(ofSize: 17)
+        cell.contentView.addSubview(title)
+        
+        let description = UILabel()
+        description.translatesAutoresizingMaskIntoConstraints = false
+        description.font = UIFont.systemFont(ofSize: 12)
+        cell.contentView.addSubview(description)
+        
+        NSLayoutConstraint.activate([
+            checkmark.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            checkmark.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 10),
+            checkmark.widthAnchor.constraint(equalToConstant: 25),
+            checkmark.heightAnchor.constraint(equalToConstant: 25),
+            
+            title.leadingAnchor.constraint(equalTo: checkmark.trailingAnchor, constant: 10),
+            title.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
+            
+            description.leadingAnchor.constraint(equalTo: checkmark.trailingAnchor, constant: 10),
+            description.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 5),
+        ])
+        
+        title.text = array[indexPath.row].title
+        description.text = array[indexPath.row].description
+        
+        cell.accessoryType = .detailDisclosureButton
+        
+        if array[indexPath.row].isComplpete {
+            checkmark.setBackgroundImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+        } else {
+            checkmark.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+    @objc func buttonAction(_ sender: UIButton) {
+        let index = sender.tag
+        if array[index].isComplpete {
+            array[index].isComplpete = false
+        } else {
+            array[index].isComplpete = true
+        }
+        saveTasks()
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let vc = DetailViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.editTaskName = array[indexPath.row].title
+        vc.editTaskDescription = array[indexPath.row].description
+        vc.isEditView = true
+        navigationItem.backButtonTitle = "Отменить"
+        navigationController?.show(vc, sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            array.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            saveTasks()
+        } else if editingStyle == .insert {
+        }
+    }
+    
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        array.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        saveTasks()
+    }
+}
+
 
 
