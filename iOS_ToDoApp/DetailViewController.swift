@@ -45,6 +45,20 @@ class DetailViewController: UIViewController {
             titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             titleTextField.heightAnchor.constraint(equalToConstant: 45)
         ])
+    }
+    
+    func descriptionConfigure() {
+        descriptionTextField.placeholder = "Описание"
+        descriptionTextField.borderStyle = .roundedRect
+        descriptionTextField.backgroundColor = .white
+        descriptionTextField.contentVerticalAlignment = .top
+        descriptionTextField.translatesAutoresizingMaskIntoConstraints = false
         
+        NSLayoutConstraint.activate([
+            descriptionTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 20),
+            descriptionTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            descriptionTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            descriptionTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+        ])
     }
 }
