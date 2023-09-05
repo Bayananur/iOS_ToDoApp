@@ -86,6 +86,24 @@ class ToDoViewController: UIViewController {
         ])
     }
     
+    func editButtonCostraints() {
+        if let symbolImage = UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .bold, scale: .large)) {
+            editButton.setImage(symbolImage, for: .normal)
+        }
+        editButton.addTarget(self, action: #selector(editTask), for: .touchDown)
+        editButton.translatesAutoresizingMaskIntoConstraints = false
+        editButton.backgroundColor = .systemBlue
+        editButton.tintColor = .white
+        editButton.layer.cornerRadius = 25
+        view.addSubview(editButton)
+        
+        NSLayoutConstraint.activate([
+            editButton.bottomAnchor.constraint(equalTo: newTaskButton.topAnchor, constant: -30),
+            editButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            editButton.widthAnchor.constraint(equalToConstant: 50),
+            editButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
 
 }
 
