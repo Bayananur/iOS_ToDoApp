@@ -124,5 +124,21 @@ class ToDoViewController: UIViewController {
         ])
     }
     
+    @objc func newTask() {
+        let vc = DetailViewController()
+        vc.modalPresentationStyle = .fullScreen
+        navigationItem.backButtonTitle = "Отменить"
+        navigationController?.show(vc, sender: self)
+    }
+    
+    @objc func editTask() {
+        if tableView.isEditing {
+            tableView.isEditing = false
+        } else {
+            tableView.isEditing = true
+        }
+    }
+}
+
 }
 
