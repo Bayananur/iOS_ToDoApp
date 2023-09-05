@@ -61,4 +61,40 @@ class DetailViewController: UIViewController {
             descriptionTextField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
         ])
     }
+    
+    func buttonConfigure() {
+        saveButton = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(saveButtonTapped))
+        navigationItem.rightBarButtonItem = saveButton
+    }
+    
+    @objc func saveButtonTapped() {
+        let defaults = UserDefaults.standard
+        let taskName = titleTextField.text!
+        let taskDescription = descriptionTextField.text!
+        var newTask = ToDo()
+        
+        newTask.title = taskName
+        newTask.description = taskDescription
+        
+        do {
+            if var array = try? JSONDecoder().decode([ToDo].self, from: defaults.data(forKey: "taskItemArray") ?? Data()) {
+                if isEditView {
+                    if let index = array.firstIndex(where: { $0.title == editTaskName && $0.description == editTaskDescription }) {
+                        array[index] = newTask
+                    }
+                } else {
+                    array.append(newTask)
+                }
+                let encodedData = try JSONEncoder().encode(array)
+                defaults.set(encodedData, forKey: "taskItemArray")
+            } else {
+                let encodedData = try JSONEncoder().encode([newTask])
+                defaults.set(encodedData, forKey: "taskItemArray")
+            }
+        } catch {
+            print("Unable to encode or decode tasks: \(error)")
+        }
+        navigationController?.popViewController(animated: true)
+    }
+
 }
